@@ -9,9 +9,15 @@ WeDo = usb.core.find(idVendor=0x0694, idProduct=0x0003)
 if WeDo is None:
 	sys.exit("Can't find Lego WeDo")
 
-endpoint = device[0][(0,0)][0]
+if WeDo.is_kernel_driver_active(0):
+	try:
+		WeDo.detach_kernel_driver(0)
+	except usb.core.USBError as e:
+		sys.exit("Could not detatch kernel driver: %s" % str(e))
 
-data += WeDo.read(endpoint.bEndpointAddress, endpoint.wMaxPacketSize)
+endpoint = WeDo[0][(0,0)][0]
+
+WeDo.read(endpoint.bEndpointAddress, endpoint.wMaxPacketSize)
 
 
 
