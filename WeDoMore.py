@@ -17,7 +17,7 @@ if WeDo.is_kernel_driver_active(0):
 
 endpoint = WeDo[0][(0,0)][0]
 
-WeDo.read(endpoint.bEndpointAddress, endpoint.wMaxPacketSize)
-
+data = WeDo.read(endpoint.bEndpointAddress, endpoint.wMaxPacketSize)
+print(data)
 
 
