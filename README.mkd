@@ -3,3 +3,5 @@ The Lego WeDo is a tethered-over-USB sensing and robotics toolkit produced by Le
 It's supported by Scratch(on Windows and OSX) and by Lego's proprietary software(on Windows.)
 
 It prominently features the [LB1836](http://semicon.sanyo.com/en/ds_e/EN3947F.pdf) motor driver and the [LM358](http://www.national.com/ds/LM/LM158.pdf) op-amp, as well as an epoxy blob with USB support.
+
+The digital communication protocol used by the Power Functions system is documented on [Philo\'s Awesome Page](http://www.philohome.com/pf/LEGO_Power_Functions_RC.pdf).
