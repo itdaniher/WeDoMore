@@ -6,4 +6,8 @@ It's explained in the [The USBMon User Guide](http://groups.google.com/group/mic
 
 >	Control (or Setup) Packets: in this case we'll find the letter 's' followed by 5 fields with the values of bmRequestType, bRequest, wValue, wIndex, wLength, as specified by the USB Specification 2.0.
 
-See also: http://www.beyondlogic.org/usbnutshell/usb6.shtml
+See also: 
+
+*	(http://www.beyondlogic.org/usbnutshell/usb6.shtml)
+
+*	(http://www.ladyada.net/learn/diykinect/)
