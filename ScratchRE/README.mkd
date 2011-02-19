@@ -1,0 +1,9 @@
+The following is an excerpt from the usbmon logs I recorded from Scratch controling the Lego WeDo:
+
+ed1f7100 362653403 S Co:7:023:0 s 21 09 0200 0000 0008 8 = 407f0000 00000000
+
+>	- Control (or Setup) Packets: in this case we'll find the letter 's' followed by 5 fields with the values of bmRequestType, bRequest, wValue, wIndex, wLength, as specified by the USB Specification 2.0.
+
+[The USBMon User Guide](http://groups.google.com/group/microdia/web/usbmon-user-guide)
+
+See also: http://www.beyondlogic.org/usbnutshell/usb6.shtml
