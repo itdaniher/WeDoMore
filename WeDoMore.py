@@ -18,13 +18,9 @@ if WeDo.is_kernel_driver_active(0):
 		sys.exit("Could not detatch kernel driver: %s" % str(e))
 
 def WeDoGet():
-	"""Use recursion to clean out the ±1 LSB offset issue."""
 	endpoint = WeDo[0][(0,0)][0]
 	data = list(endpoint.read(64)[-8:])
-	if data[5] != 231:
-		return data
-	else:
-		return WeDoGet()
+	return data
 
 def WeDoWrite(motorA, motorB):
 	"""Arguments should be in form of a number between 0 and 127, positive or negative. Magic numbers used for the ctrl_transfer derived from sniffing USB coms."""
@@ -41,6 +37,11 @@ def getData():
 	sensorData = {rawData[3]: rawData[2], rawData[5]: rawData[4]}
 	return (rawData, sensorData)
 
-distanceSensorIDS = [88, 89]
-
-
+def interpretData():
+	tiltMapping = {13: "up", 16: "up", 90: "down", 89: "down", 38: "right", 39: "right", 115: "left", 114: "left"}
+	data = 	getData()[1]
+	#distance sensor
+	for num in data.keys():
+		if num in [88, 89] : return ('distance', data[num]-39)
+		elif num in [18, 19] : return ('tilt', tiltMapping[data[num]])
+		elif num in [114, 115] : return ('normal', 1)
