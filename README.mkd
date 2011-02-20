@@ -9,6 +9,9 @@ The digital communication protocol used by the Power Functions system is documen
 Current State: WeDoMore.py contains a series of functions that allow a user to read sensor data and control actuators. There are lots of magic numbers with little rhyme or reason, but the script provides useful control and communication with the WeDo.
 
 ToDo:
+
 *	Construct a "WeDo" class from the series of functions provided.
+
 *	Integrate with TurtleArt.
+
 *	Try and sort out a logic to the plethora of random numbers?
