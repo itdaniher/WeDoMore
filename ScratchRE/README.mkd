@@ -8,6 +8,6 @@ It's explained in the [The USBMon User Guide](http://groups.google.com/group/mic
 
 See also: 
 
-*	(http://www.beyondlogic.org/usbnutshell/usb6.shtml)
+*	[Beyond Logic's Information Page on USB](http://www.beyondlogic.org/usbnutshell/usb6.shtml)
 
-*	(http://www.ladyada.net/learn/diykinect/)
+*	[Lady Ada's Tutorial on Hacking the Kinect](http://www.ladyada.net/learn/diykinect/)
