@@ -23,7 +23,8 @@ def WeDoGet():
 	return data
 
 def WeDoWrite(motorA, motorB):
-	"""Arguments should be in form of a number between 0 and 127, positive or negative. Magic numbers used for the ctrl_transfer derived from sniffing USB coms."""
+	"""Arguments should be in form of a number between 0 and 127, positive or negative. 
+Magic numbers used for the ctrl_transfer derived from sniffing USB coms."""
 	motorA = int(motorA)
 	motorB = int(motorB)
 	magicNumber = 64
@@ -42,6 +43,9 @@ def interpretData():
 	data = 	getData()[1]
 	#distance sensor
 	for num in data.keys():
-		if num in [88, 89] : return ('distance', data[num]-39)
-		elif num in [18, 19] : return ('tilt', tiltMapping[data[num]])
-		elif num in [114, 115] : return ('normal', 1)
+		if num in [88, 89] : 
+			return ('distance', data[num]-39)
+		elif num in [18, 19] : 
+			return ('tilt', tiltMapping[data[num]])
+		elif num in [114, 115] : 
+			return ('normal', 1)
