@@ -22,6 +22,7 @@ endpoint = WeDo[0][(0,0)][0]
 print(endpoint.read(64)[-8:])
 
 def WeDoWrite(motorA, motorB):
+	"""Arguments should be in form of a number between 0 and 127, positive or negative. Magic numbers used for the ctrl_transfer derived from sniffing USB coms."""
 	motorA = int(motorA)
 	motorB = int(motorB)
 	magicNumber = 64
