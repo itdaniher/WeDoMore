@@ -32,22 +32,25 @@ Magic numbers used for the ctrl_transfer derived from sniffing USB coms."""
 	WeDo.ctrl_transfer(bmRequestType = 0x21, bRequest = 0x09, wValue = 0x0200, wIndex = 0, data_or_wLength = data)
 
 
-even = lambda x: x - 1(x&1) 
+even = lambda x: x - 1*(x&1) 
 
 def getData():
+	rawData = WeDoGet()
 	sensorData = {even(rawData[3]): rawData[2], even(rawData[5]): rawData[4]}
 	return sensorData
 
 def interpretData():
-	tiltMapping = 
-	data = 	getData()[1]
+	data = 	getData()
 	#distance sensor
 	for num in data.keys():
-		if num in [178] : 
-			return ('distance', data[num]-39)
-		elif num in [38] : 
-			return ('tilt', tiltMapping[data[num]])
-		elif num in [238]:
+		if num in [0, 2]:
 			return ('motor', 1)
-		elif num in [230] : 
+		elif num == 178: 
+			return ('distance', data[num]-39)
+		elif num == 38: 
+			return ('tilt', WeDoDefs.processTilt(data[num]))
+		elif num in [238]:
+			return ('motor', 0)
+		elif num in [228, 230]: 
 			return ('normal', 1)
+		return response
