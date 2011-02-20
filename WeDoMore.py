@@ -19,8 +19,11 @@ if WeDo.is_kernel_driver_active(0):
 
 endpoint = WeDo[0][(0,0)][0]
 
-map(hex, list(endpoint.read(16)))
+print(endpoint.read(64)[-8:])
 
-WeDo.ctrl_transfer(bmRequestType = 0x21, bRequest = 0x09, wValue = 0x0200, wIndex = 0, data_or_wLength = [0x40, 0x7f, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00])
-
-print(data)
+def WeDoWrite(motorA, motorB):
+	motorA = int(motorA)
+	motorB = int(motorB)
+	magicNumber = 64
+	data = [magicNumber, motorA&0xFF, motorB&0xFF, 0x00, 0x00, 0x00, 0x00, 0x00]
+	WeDo.ctrl_transfer(bmRequestType = 0x21, bRequest = 0x09, wValue = 0x0200, wIndex = 0, data_or_wLength = data)
