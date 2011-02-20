@@ -1,3 +1,5 @@
+##About the WeDo
+
 The Lego WeDo is a tethered-over-USB sensing and robotics toolkit produced by Lego for the educational market.
 
 It's supported by Scratch(on Windows and OSX) and by Lego's proprietary software(on Windows.)
@@ -6,12 +8,14 @@ It prominently features the [LB1836](http://semicon.sanyo.com/en/ds_e/EN3947F.pd
 
 The digital communication protocol used by the Power Functions system is documented on [Philo's Awesome Page](http://www.philohome.com/pf/LEGO_Power_Functions_RC.pdf).
 
-Current State: WeDoMore.py contains a series of functions that allow a user to read sensor data and control actuators. There are lots of magic numbers with little rhyme or reason, but the script provides useful control and communication with the WeDo.
+##Current State
 
-ToDo:
+WeDoMore.py contains a series of functions that allow a user to read sensor data and control actuators. There are lots of magic numbers with little rhyme or reason, but the script provides useful control and communication with the WeDo.
+
+##ToDo:
 
 *	Construct a "WeDo" class from the series of functions provided.
 
 *	Integrate with TurtleArt.
 
-*	Try and sort out a logic to the plethora of random numbers?
+*	Try and sort out any rhyme or reason to the plethora of magic numbers?
