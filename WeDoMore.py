@@ -13,6 +13,7 @@ if WeDo.is_kernel_driver_active(0):
 		sys.exit("Could not detatch kernel driver: %s" % str(e))
 
 def WeDoGet():
+	"""Read 64 bytes from the WeDo's endpoint, but only return the last eight."""
 	endpoint = WeDo[0][(0,0)][0]
 	data = list(endpoint.read(64)[-8:])
 	return data
@@ -28,11 +29,13 @@ Magic numbers used for the ctrl_transfer derived from sniffing USB coms."""
 
 
 def getData():
+	"""Sensor data is contained in the 2nd and 4th byte, with sensor IDs being contained in the 3rd and 5th byte respectively."""
 	rawData = WeDoGet()
 	sensorData = {rawData[3]: rawData[2], rawData[5]: rawData[4]}
 	return sensorData
 
 def processTilt(v):
+	"""The data returned by the tilt sensor is really terrible. Use a series of less-than compairisons to evaluate it."""
 	if v < 49:
 		return 3
 	elif v < 100:
@@ -45,6 +48,7 @@ def processTilt(v):
 		return 0
 
 def interpretData():
+	"""This function contains all the magic-number sensor/actuator IDs. It returns a list containing one or two tuples of the form (name, value)."""
 	data = getData()
 	response = []
 	for num in data.keys():
