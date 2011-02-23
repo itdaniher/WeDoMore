@@ -15,8 +15,6 @@ WeDoMore.py contains a series of functions that allow a user to read sensor data
 
 ##ToDo:
 
-*	Construct a "WeDo" class from the series of functions provided.
-
-*	Integrate with TurtleArt.
-
-*	Try and sort out any rhyme or reason to the plethora of magic numbers?
+ *	Construct a "WeDo" class from the series of functions provided.
+ *	Integrate with TurtleArt.
+ *	Try and sort out any rhyme or reason to the plethora of magic numbers?
