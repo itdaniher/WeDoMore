@@ -1,0 +1,3 @@
+[submodule "TurtleArt/turtleart"]
+	path = TurtleArt/turtleart
+	url = git://git.sugarlabs.org/turtleart/mainline.git
