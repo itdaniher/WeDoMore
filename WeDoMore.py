@@ -1,3 +1,6 @@
+#code released under a beerware license.
+#Ian Daniher - Mar6 2011
+
 import sys
 import usb.core
 
@@ -23,8 +26,8 @@ class WeDo:
 		"""Arguments should be in form of a number between 0 and 127, positive or negative. Magic numbers used for the ctrl_transfer derived from sniffing USB coms."""
 		motorA = int(valMotorA)
 		motorB = int(valMotorB)
-		magicNumber = 64
-		data = [magicNumber, valMotorA&0xFF, valMotorB&0xFF, 0x00, 0x00, 0x00, 0x00, 0x00]
+		#create databuffer using motor values and magic motor-control number
+		data = [64, valMotorA&0xFF, valMotorB&0xFF, 0x00, 0x00, 0x00, 0x00, 0x00]
 		self.dev.ctrl_transfer(bmRequestType = 0x21, bRequest = 0x09, wValue = 0x0200, wIndex = 0, data_or_wLength = data)
 
 
@@ -35,7 +38,7 @@ class WeDo:
 		return sensorData
 
 	def processTilt(self, v):
-		"""The data returned by the tilt sensor is really terrible. Use a series of less-than compairisons to evaluate it."""
+		"""Use a series of compairisons to evaluate tilt sensor data."""
 		if v == 27:
 			return 3
 		elif v == 74:
