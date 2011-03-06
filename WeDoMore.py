@@ -4,7 +4,6 @@
 import sys
 import usb.core
 
-
 class WeDo:
 	def __init__(self):
 		"""Find a USB device with the VID and PID of the Lego WeDo. If the HID kernel driver is active, detatch it."""
