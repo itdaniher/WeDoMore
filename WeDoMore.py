@@ -20,8 +20,7 @@ class WeDo:
 		return data
 
 	def writeMotor(self, valMotorA, valMotorB):
-		"""Arguments should be in form of a number between 0 and 127, positive or negative. 
-Magic numbers used for the ctrl_transfer derived from sniffing USB coms."""
+		"""Arguments should be in form of a number between 0 and 127, positive or negative. Magic numbers used for the ctrl_transfer derived from sniffing USB coms."""
 		motorA = int(valMotorA)
 		motorB = int(valMotorB)
 		magicNumber = 64
@@ -37,13 +36,13 @@ Magic numbers used for the ctrl_transfer derived from sniffing USB coms."""
 
 	def processTilt(self, v):
 		"""The data returned by the tilt sensor is really terrible. Use a series of less-than compairisons to evaluate it."""
-		if v < 49:
+		if v == 27:
 			return 3
-		elif v < 100:
+		elif v == 74:
 			return 2
-		elif v < 154:
+		elif v == 180:
 			return 0
-		elif v < 205:
+		elif v == 230:
 			return 1
 		else:
 			return 0
@@ -58,9 +57,9 @@ Magic numbers used for the ctrl_transfer derived from sniffing USB coms."""
 			elif num in [176, 177, 178, 179]: 
 				response.append( ('distance', data[num]-39) )
 			elif num in [38, 39]: 
-				response.append( ('tilt', processTilt(data[num])) )
+				response.append( ('tilt', self.processTilt(data[num])) )
 			elif num in [238, 239]:
 				response.append( ('motor', 0) )
 			elif num in [228, 230]: 
 				response.append( ('normal', 1) )
-			return response
+		return response
