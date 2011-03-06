@@ -7,6 +7,7 @@ import usb.core
 
 class WeDo:
 	def __init__(self):
+		"""Find a USB device with the VID and PID of the Lego WeDo. If the HID kernel driver is active, detatch it."""
 		self.dev = usb.core.find(idVendor=0x0694, idProduct=0x0003)
 		if self.dev is None:
 			sys.exit("Can't find Lego WeDo")
@@ -38,7 +39,7 @@ class WeDo:
 		return sensorData
 
 	def processTilt(self, v):
-		"""Use a series of compairisons to evaluate tilt sensor data."""
+		"""Use a series of elif/value-checks to process the tilt sensor data."""
 		if v == 27:
 			return 3
 		elif v == 74:
