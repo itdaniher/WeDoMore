@@ -58,7 +58,7 @@ class WeDo:
 			if num in [0, 1, 2]:
 				response.append( ('motor', 1) )
 			elif num in [176, 177, 178, 179]: 
-				response.append( ('distance', data[num]-39) )
+				response.append( ('distance', data[num]-69) )
 			elif num in [38, 39]: 
 				response.append( ('tilt', self.processTilt(data[num])) )
 			elif num in [238, 239]:
