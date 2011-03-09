@@ -15,6 +15,8 @@ class WeDo:
 				self.dev.detach_kernel_driver(0)
 			except usb.core.USBError as e:
 				sys.exit("Could not detatch kernel driver: %s" % str(e))
+		self.valMotorA = 0
+		self.valMotorB = 0
 
 	def getRawData(self):
 		"""Read 64 bytes from the WeDo's endpoint, but only return the last eight."""
@@ -22,14 +24,13 @@ class WeDo:
 		data = list(self.endpoint.read(64)[-8:])
 		return data
 
-	def writeMotor(self, valMotorA, valMotorB):
+	def writeMotors(self, valMotorA, valMotorB):
 		"""Arguments should be in form of a number between 0 and 127, positive or negative. Magic numbers used for the ctrl_transfer derived from sniffing USB coms."""
-		motorA = int(valMotorA)
-		motorB = int(valMotorB)
+		self.valMotorA = int(valMotorA)
+		self.valMotorB = int(valMotorB)
 		#create databuffer using motor values and magic motor-control number
-		data = [64, valMotorA&0xFF, valMotorB&0xFF, 0x00, 0x00, 0x00, 0x00, 0x00]
+		data = [64, self.valMotorA&0xFF, self.valMotorB&0xFF, 0x00, 0x00, 0x00, 0x00, 0x00]
 		self.dev.ctrl_transfer(bmRequestType = 0x21, bRequest = 0x09, wValue = 0x0200, wIndex = 0, data_or_wLength = data)
-
 
 	def getData(self):
 		"""Sensor data is contained in the 2nd and 4th byte, with sensor IDs being contained in the 3rd and 5th byte respectively."""
@@ -39,16 +40,16 @@ class WeDo:
 
 	def processTilt(self, v):
 		"""Use a series of elif/value-checks to process the tilt sensor data."""
-		if v == 27:
+		if v in [24, 25, 26, 27]:
 			return 3
-		elif v == 74:
+		elif v == [73, 74, 75, 76]:
 			return 2
-		elif v == 180:
+		elif v == [175, 176, 177, 178, 179, 180]:
 			return 0
 		elif v == 230:
 			return 1
 		else:
-			return 0
+			return -1
 
 	def interpretData(self):
 		"""This function contains all the magic-number sensor/actuator IDs. It returns a list containing one or two tuples of the form (name, value)."""
@@ -66,3 +67,31 @@ class WeDo:
 			elif num in [228, 230]: 
 				response.append( ('normal', 1) )
 		return response
+
+	def getTilt(self):
+		data = self.getData()
+		for num in data.keys():
+			if num in [38, 39]:
+				return self.processTilt(data[num])
+			else:
+				return 0
+
+	def getDistance(self):
+		data = self.getData()
+		for num in data.keys():
+			if num in [176, 177, 178, 179]:
+				return data[num]-69
+			else:
+				return 0
+
+	def setMotorA(self, valMotorA):
+		self.writeMotors(valMotorA, self.valMotorB)
+
+	def setMotorB(self, valMotorB):
+		self.writeMotors(self.valMotorA, valMotorB)
+
+	def getMotorA(self):
+		return self.valMotorA
+
+	def getMotorB(self):
+		return self.valMotorB
