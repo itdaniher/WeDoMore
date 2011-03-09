@@ -20,7 +20,7 @@ class Wedo_plugin(Plugin):
 
 		palette = make_palette('sensor', colors=["#FF6060", "#A06060"], help_string=_('Palette of sensor blocks'))
 
-		primitive_dictionary['distance'] = self.prim_distance
+		primitive_dictionary['distance'] = self.WeDo.getDistance
 
 		palette.add_block('distance',
 						style='box-style',
@@ -31,9 +31,6 @@ class Wedo_plugin(Plugin):
 
 		self._parent.lc.def_prim('distance', 0,
                                   lambda self: primitive_dictionary['distance']())
-
-	def prim_distance(self):
-		self.WeDo.getDistance()
 
 	def start(self):
 		pass
