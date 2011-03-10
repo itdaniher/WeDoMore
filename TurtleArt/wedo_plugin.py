@@ -20,7 +20,16 @@ class Wedo_plugin(Plugin):
 
 		palette = make_palette('WeDo', colors=["#FF6060", "#A06060"], help_string=_('Palette of WeDo blocks'))
 
-		primitive_dictionary['distance'] = self.WeDo.getDistance
+		primitive_dictionary['tilt'] = self.WeDo.getTilt
+
+		palette.add_block('tilt',
+						style='box-style',
+						label=_('tilt'),
+						help_string=_('tilt sensor output'),
+						value_block=True,
+						prim_name = 'tilt')
+
+		self._parent.lc.def_prim('tilt', 0, lambda self: primitive_dictionary['tilt']())
 
 		palette.add_block('distance',
 						style='box-style',
@@ -29,8 +38,7 @@ class Wedo_plugin(Plugin):
 						value_block=True,
 						prim_name = 'distance')
 
-		self._parent.lc.def_prim('distance', 0,
-                                  lambda self: primitive_dictionary['distance']())
+		self._parent.lc.def_prim('distance', 0, lambda self: primitive_dictionary['distance']())
 
 		primitive_dictionary['setMotorA'] = self.WeDo.setMotorA
 
@@ -60,7 +68,7 @@ class Wedo_plugin(Plugin):
 		pass
 
 	def stop(self):
-		pass
+	    self.WeDo.setMotors(0,0)
 
 	def goto_background(self):
 	    pass
@@ -69,8 +77,4 @@ class Wedo_plugin(Plugin):
 	    pass
 
 	def quit(self):
-	    self.stop()
-
-	def prim_distance(self):
-		return self.WeDo.getDistance()
-
+		self.WeDo.setMotors(0,0)

@@ -17,6 +17,7 @@ class WeDo:
 				sys.exit("Could not detatch kernel driver: %s" % str(e))
 		self.valMotorA = 0
 		self.valMotorB = 0
+		print('successfully imported')
 
 	def getRawData(self):
 		"""Read 64 bytes from the WeDo's endpoint, but only return the last eight."""
@@ -24,7 +25,7 @@ class WeDo:
 		data = list(self.endpoint.read(64)[-8:])
 		return data
 
-	def writeMotors(self, valMotorA, valMotorB):
+	def setMotors(self, valMotorA, valMotorB):
 		"""Arguments should be in form of a number between 0 and 127, positive or negative. Magic numbers used for the ctrl_transfer derived from sniffing USB coms."""
 		self.valMotorA = int(valMotorA)
 		self.valMotorB = int(valMotorB)
@@ -85,10 +86,10 @@ class WeDo:
 				return 0
 
 	def setMotorA(self, valMotorA):
-		self.writeMotors(valMotorA, self.valMotorB)
+		self.setMotors(valMotorA, self.valMotorB)
 
 	def setMotorB(self, valMotorB):
-		self.writeMotors(self.valMotorA, valMotorB)
+		self.setMotors(self.valMotorA, valMotorB)
 
 	def getMotorA(self):
 		return self.valMotorA
