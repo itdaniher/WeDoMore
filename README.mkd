@@ -15,4 +15,4 @@ WeDoMore.py contains a series of functions that allow a user to read sensor data
 
 ##ToDo:
 
- *	Integrate with TurtleArt.
+* Massive Testing!
