@@ -26,6 +26,7 @@ class WeDo:
 
 	def processMotorValues(self, value):
 		"""Check to make sure motor values are sane."""
+		print(value)
 		retValue = int(value)
 		if 0 < value < 101:
 			retValue += 27 
@@ -33,8 +34,6 @@ class WeDo:
 			retValue -= 27
 		elif value == 0:
 			retValue = 0
-		else:
-			raise ValueError("Motor values must be between -100 and 100")
 		return retValue
 	
 	def setMotors(self, valMotorA, valMotorB):

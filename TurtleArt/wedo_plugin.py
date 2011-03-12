@@ -1,7 +1,7 @@
 from gettext import gettext as _
 
 from plugin import Plugin
-from WeDoMore import WeDo
+from plugins.lib.WeDoMore import WeDo
 
 from TurtleArt.tapalette import make_palette
 from TurtleArt.taconstants import XO1, XO15
@@ -30,6 +30,8 @@ class Wedo_plugin(Plugin):
 						prim_name = 'tilt')
 
 		self._parent.lc.def_prim('tilt', 0, lambda self: primitive_dictionary['tilt']())
+
+		primitive_dictionary['distance'] = self.WeDo.getDistance
 
 		palette.add_block('distance',
 						style='box-style',
