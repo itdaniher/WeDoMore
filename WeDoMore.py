@@ -1,5 +1,4 @@
-#code released under a beerware license.
-#Ian Daniher - Mar6 2011
+#Ian Daniher - Mar11 2011
 
 import sys
 import usb.core
