@@ -25,13 +25,26 @@ class WeDo:
 		data = list(self.endpoint.read(64)[-8:])
 		return data
 
+	def processMotorValues(self, value):
+		"""Check to make sure motor values are sane."""
+		retValue = int(value)
+		if 0 < value < 101:
+			retValue += 27 
+		elif -101 < value < 0:
+			retValue -= 27
+		elif value == 0:
+			retValue = 0
+		else:
+			raise ValueError("Motor values must be between -100 and 100")
+		return retValue
+	
 	def setMotors(self, valMotorA, valMotorB):
-		"""Arguments should be in form of a number between 0 and 127, positive or negative. Magic numbers used for the ctrl_transfer derived from sniffing USB coms."""
-		self.valMotorA = int(valMotorA)
-		self.valMotorB = int(valMotorB)
-		#create databuffer using motor values and magic motor-control number
+		"""Arguments should be in form of a number between 0 and 100, positive or negative. Magic numbers used for the ctrl_transfer derived from sniffing USB coms."""
+		self.valMotorA = self.processMotorValues(valMotorA)
+		self.valMotorB = self.processMotorValues(valMotorB)
 		data = [64, self.valMotorA&0xFF, self.valMotorB&0xFF, 0x00, 0x00, 0x00, 0x00, 0x00]
 		self.dev.ctrl_transfer(bmRequestType = 0x21, bRequest = 0x09, wValue = 0x0200, wIndex = 0, data_or_wLength = data)
+
 
 	def getData(self):
 		"""Sensor data is contained in the 2nd and 4th byte, with sensor IDs being contained in the 3rd and 5th byte respectively."""
