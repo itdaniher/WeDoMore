@@ -41,6 +41,28 @@ class Wedo_plugin(Plugin):
 						prim_name = 'distance')
 
 		self._parent.lc.def_prim('distance', 0, lambda self: primitive_dictionary['distance']())
+		
+		primitive_dictionary['getMotorA'] = self.WeDo.getMotorA
+
+		palette.add_block('getMotorA',
+						style='box-style',
+						label=_('Motor A Value'),
+						help_string=_('returns the current value of Motor A'),
+						value_block=True,
+						prim_name = 'getMotorA')
+
+		self._parent.lc.def_prim('getMOtorA', 0, lambda self: primitive_dictionary['getMotorA']())
+
+		primitive_dictionary['getMotorB'] = self.WeDo.getMotorA
+
+		palette.add_block('getMotorB',
+						style='box-style',
+						label=_('Motor B Value'),
+						help_string=_('returns the current value of Motor B'),
+						value_block=True,
+						prim_name = 'getMotorB')
+
+		self._parent.lc.def_prim('getMOtorB', 0, lambda self: primitive_dictionary['getMotorB']())
 
 		primitive_dictionary['setMotorA'] = self.WeDo.setMotorA
 
