@@ -2,21 +2,22 @@
 
 import sys
 import usb.core
+import logging
 
 class WeDo:
 	def __init__(self):
 		"""Find a USB device with the VID and PID of the Lego WeDo. If the HID kernel driver is active, detatch it."""
 		self.dev = usb.core.find(idVendor=0x0694, idProduct=0x0003)
 		if self.dev is None:
-			sys.exit("Can't find Lego WeDo")
-		if self.dev.is_kernel_driver_active(0):
-			try:
-				self.dev.detach_kernel_driver(0)
-			except usb.core.USBError as e:
-				sys.exit("Could not detatch kernel driver: %s" % str(e))
+				logging.debug("No Lego WeDo found")
+		else:
+			if self.dev.is_kernel_driver_active(0):
+				try:
+					self.dev.detach_kernel_driver(0)
+				except usb.core.USBError as e:
+					sys.exit("Could not detatch kernel driver: %s" % str(e))
 		self.valMotorA = 0
 		self.valMotorB = 0
-		print('successfully imported')
 
 	def getRawData(self):
 		"""Read 64 bytes from the WeDo's endpoint, but only return the last eight."""

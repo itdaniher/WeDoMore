@@ -16,6 +16,7 @@ class Wedo_plugin(Plugin):
 	def __init__(self, parent):
 		self.WeDo = WeDo()
 		self._parent = parent
+
 	def setup(self):
 
 		palette = make_palette('WeDo', colors=["#FF6060", "#A06060"], help_string=_('Palette of WeDo blocks'))
