@@ -4,6 +4,13 @@ import sys
 import usb.core
 import logging
 
+TILT_FORWARD = 0
+TILT_BACK = 3
+TILT_LEFT = 1
+TILT_RIGHT = 2
+NO_TILT = -1
+
+
 class WeDo:
 	def __init__(self):
 		"""Find a USB device with the VID and PID of the Lego WeDo. If the HID kernel driver is active, detatch it."""
@@ -54,15 +61,15 @@ class WeDo:
 	def processTilt(self, v):
 		"""Use a series of elif/value-checks to process the tilt sensor data."""
 		if v in [24, 25, 26, 27]:
-			return 3
-		elif v == [73, 74, 75, 76]:
-			return 2
-		elif v == [175, 176, 177, 178, 179, 180]:
-			return 0
-		elif v == 230:
-			return 1
+			return TILT_BACK
+		elif v in [73, 74, 75, 76]:
+			return TILT_RIGHT
+		elif v in [175, 176, 177, 178, 179, 180]:
+			return TILT_FORWARD
+		elif v in [229, 230]:
+			return TILT_LEFT
 		else:
-			return -1
+			return NO_TILT
 
 	def interpretData(self):
 		"""This function contains all the magic-number sensor/actuator IDs. It returns a list containing one or two tuples of the form (name, value)."""
@@ -82,14 +89,18 @@ class WeDo:
 		return response
 
 	def getTilt(self):
+		if self.dev is None:
+			return NO_TILT
 		data = self.getData()
 		for num in data.keys():
 			if num in [38, 39]:
 				return self.processTilt(data[num])
 			else:
-				return 0
+				return NO_TILT
 
 	def getDistance(self):
+		if self.dev is None:
+			return 0
 		data = self.getData()
 		for num in data.keys():
 			if num in [176, 177, 178, 179]:
@@ -98,13 +109,21 @@ class WeDo:
 				return 0
 
 	def setMotorA(self, valMotorA):
+		if self.dev is None:
+			return
 		self.setMotors(valMotorA, self.valMotorB)
 
 	def setMotorB(self, valMotorB):
+		if self.dev is None:
+			return
 		self.setMotors(self.valMotorA, valMotorB)
 
 	def getMotorA(self):
+		if self.dev is None:
+			return 0
 		return self.valMotorA
 
 	def getMotorB(self):
+		if self.dev is None:
+			return 0
 		return self.valMotorB
