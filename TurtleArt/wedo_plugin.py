@@ -1,7 +1,7 @@
 from gettext import gettext as _
 
-from plugin import Plugin
-from plugins.lib.WeDoMore import WeDo
+from plugins.plugin import Plugin
+from WeDoMore import WeDo
 
 from TurtleArt.tapalette import make_palette
 from TurtleArt.taconstants import XO1, XO15
@@ -13,93 +13,98 @@ _logger = logging.getLogger('turtleart-activity WeDo plugin')
 
 class Wedo_plugin(Plugin):
 
-	def __init__(self, parent):
-		self.WeDo = WeDo()
-		self._parent = parent
+    def __init__(self, parent):
+        self.WeDo = WeDo()
+        self._parent = parent
+        if self.WeDo.dev is None:
+            self._status = False  # no WeDo device found
+        else:
+            self._status = True
 
-	def setup(self):
+    def setup(self):
 
-		palette = make_palette('WeDo', colors=["#FF6060", "#A06060"], help_string=_('Palette of WeDo blocks'))
+        palette = make_palette('WeDo', colors=["#FF6060", "#A06060"],
+			       help_string=_('Palette of WeDo blocks'))
 
-		primitive_dictionary['tilt'] = self.WeDo.getTilt
+        primitive_dictionary['wedotilt'] = self.WeDo.getTilt
+        palette.add_block('tilt',
+                        style='box-style',
+                        label=_('tilt'),
+                        help_string=_('tilt sensor output: (-1 == no tilt,\
+ 0 == tilt forward, 3 == tilt back, 1 == tilt left, 2 == tilt right)'),
+                        value_block=True,
+                        prim_name = 'wedotilt')
+        self._parent.lc.def_prim(
+            'wedotilt', 0, lambda self: primitive_dictionary['wedotilt']())
 
-		palette.add_block('tilt',
-						style='box-style',
-						label=_('tilt'),
-						help_string=_('tilt sensor output'),
-						value_block=True,
-						prim_name = 'tilt')
+        primitive_dictionary['wedodistance'] = self.WeDo.getDistance
+        palette.add_block('wedodistance',
+                        style='box-style',
+                        label=_('distance'),
+                        help_string=_('distance sensor output'),
+                        value_block=True,
+                        prim_name = 'wedodistance')
+        self._parent.lc.def_prim(
+            'wedodistance', 0,
+            lambda self: primitive_dictionary['wedodistance']())
+        
+        primitive_dictionary['wedogetMotorA'] = self.WeDo.getMotorA
+        palette.add_block('wedogetMotorA',
+                        style='box-style',
+                        label=_('Motor A'),
+                        help_string=_('returns the current value of Motor A'),
+                        value_block=True,
+                        prim_name = 'wedogetMotorA')
 
-		self._parent.lc.def_prim('tilt', 0, lambda self: primitive_dictionary['tilt']())
+        self._parent.lc.def_prim('wedogetMotorA', 0,
+				 lambda self: primitive_dictionary['wedogetMotorA']())
 
-		primitive_dictionary['distance'] = self.WeDo.getDistance
+        primitive_dictionary['wedogetMotorB'] = self.WeDo.getMotorB
+        palette.add_block('wedogetMotorB',
+                        style='box-style',
+                        label=_('Motor B'),
+                        help_string=_('returns the current value of Motor B'),
+                        value_block=True,
+                        prim_name = 'wedogetMotorB')
+        self._parent.lc.def_prim(
+            'wedogetMotorB', 0,
+            lambda self: primitive_dictionary['wedogetMotorB']())
 
-		palette.add_block('distance',
-						style='box-style',
-						label=_('distance'),
-						help_string=_('distance sensor output'),
-						value_block=True,
-						prim_name = 'distance')
+        primitive_dictionary['wedosetMotorA'] = self.WeDo.setMotorA
+        palette.add_block('wedosetMotorA',
+                        style = 'basic-style-1arg',
+                        label = _('Motor A'),
+                        default = 0,
+                        prim_name = 'wedosetMotorA',
+                        help_string = _('set the value for Motor A'))
+        self._parent.lc.def_prim(
+            'wedosetMotorA', 1,
+            lambda self, a: primitive_dictionary['setMotorA'](a))
 
-		self._parent.lc.def_prim('distance', 0, lambda self: primitive_dictionary['distance']())
-		
-		primitive_dictionary['getMotorA'] = self.WeDo.getMotorA
+        primitive_dictionary['wedosetMotorB'] = self.WeDo.setMotorB
+        palette.add_block('wedosetMotorB',
+                        style = 'basic-style-1arg',
+                        label = _('Motor B'),
+                        default = 0,
+                        prim_name = 'wedosetMotorB',
+                        help_string = _('set the value for Motor B'))
+        self._parent.lc.def_prim(
+            'wedosetMotorB', 1,
+            lambda self, b: primitive_dictionary['wedosetMotorB'](b))
 
-		palette.add_block('getMotorA',
-						style='box-style',
-						label=_('Motor A Value'),
-						help_string=_('returns the current value of Motor A'),
-						value_block=True,
-						prim_name = 'getMotorA')
+    def start(self):
+        pass
 
-		self._parent.lc.def_prim('getMOtorA', 0, lambda self: primitive_dictionary['getMotorA']())
+    def stop(self):
+        if self._status:
+            self.WeDo.setMotors(0, 0)
 
-		primitive_dictionary['getMotorB'] = self.WeDo.getMotorA
+    def goto_background(self):
+        pass
 
-		palette.add_block('getMotorB',
-						style='box-style',
-						label=_('Motor B Value'),
-						help_string=_('returns the current value of Motor B'),
-						value_block=True,
-						prim_name = 'getMotorB')
+    def return_to_foreground(self):
+        pass
 
-		self._parent.lc.def_prim('getMOtorB', 0, lambda self: primitive_dictionary['getMotorB']())
-
-		primitive_dictionary['setMotorA'] = self.WeDo.setMotorA
-
-		palette.add_block('setMotorA',
-						style = 'basic-style-1arg',
-						label = _('setMotorA'),
-						default = ['a'],
-						prim_name = 'setMotorA',
-						help_string = _(''))
-
-		self._parent.lc.def_prim('setMotorA', 1,
-                                  lambda self, a: primitive_dictionary['setMotorA'](a))
-
-		primitive_dictionary['setMotorB'] = self.WeDo.setMotorB
-
-		palette.add_block('setMotorB',
-						style = 'basic-style-1arg',
-						label = _('setMotorB'),
-						default = ['b'],
-						prim_name = 'setMotorB',
-						help_string = _(''))
-
-		self._parent.lc.def_prim('setMotorB', 1,
-                                  lambda self, b: primitive_dictionary['setMotorB'](b))
-
-	def start(self):
-		pass
-
-	def stop(self):
-	    self.WeDo.setMotors(0,0)
-
-	def goto_background(self):
-	    pass
-
-	def return_to_foreground(self):
-	    pass
-
-	def quit(self):
-		self.WeDo.setMotors(0,0)
+    def quit(self):
+        if self._status:
+            self.WeDo.setMotors(0, 0)
