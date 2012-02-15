@@ -79,7 +79,7 @@ class Wedo_plugin(Plugin):
                         help_string = _('set the value for Motor A'))
         self._parent.lc.def_prim(
             'wedosetMotorA', 1,
-            lambda self, a: primitive_dictionary['setMotorA'](a))
+            lambda self, a: primitive_dictionary['wedosetMotorA'](a))
 
         primitive_dictionary['wedosetMotorB'] = self.WeDo.setMotorB
         palette.add_block('wedosetMotorB',
