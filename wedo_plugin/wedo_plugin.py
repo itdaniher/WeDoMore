@@ -1,6 +1,11 @@
 from gettext import gettext as _
 
 from plugins.plugin import Plugin
+
+import os
+import sys
+sys.path.insert(0, os.path.abspath('./plugins/wedo_plugin'))
+
 from WeDoMore import WeDo
 
 from TurtleArt.tapalette import make_palette
