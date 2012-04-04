@@ -14,8 +14,6 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 import sys
-import os
-sys.path.append(os.path.dirname(__file__))
 import usb.core
 import logging
 
