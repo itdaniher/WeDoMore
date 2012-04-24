@@ -103,6 +103,8 @@ class WeDo:
 		return response
 
 	def getTilt(self):
+		if self.dev is None:
+			return NO_TILT
 		data = self.getData()
 		for num in data.keys():
 			if num in [38, 39]:
@@ -119,10 +121,12 @@ class WeDo:
 		return 0
 
 	def setMotorA(self, valMotorA):
-		self.setMotors(valMotorA, self.valMotorB)
+		if not(self.dev is None):
+			self.setMotors(valMotorA, self.valMotorB)
 
 	def setMotorB(self, valMotorB):
-		self.setMotors(self.valMotorA, valMotorB)
+		if not(self.dev is None):
+			self.setMotors(self.valMotorA, valMotorB)
 
 	def getMotorA(self):
 		if self.dev is None:
