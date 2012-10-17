@@ -47,12 +47,7 @@ class WeDo:
         it."""
         self.dev = None
         self.number = 0
-        if self.dev is None:
-            device_list = scan_for_devices()
-            if len(device_list) > 0:
-                self.dev = device_list[0]  # Default to first device
-        else:
-            self.dev = device
+        self.dev = device
         if self.dev is None:
             logging.debug("No Lego WeDo found")
         else:
@@ -71,16 +66,16 @@ class WeDo:
                         logger.error(
                             "Could not detatch kernel driver: %s" % (str(e)))
             except usb.core.USBError as e:
-                logger.error("Could not talk to device: %s" % (str(e)))
+                logger.error("Could not talk to WeDo device: %s" % (str(e)))
+        self.endpoint = self.dev[0][(0,0)][0]
 
     def getRawData(self):
         """Read 64 bytes from the WeDo's endpoint, but only
         return the last eight."""
         try:
-            self.endpoint = self.dev[0][(0,0)][0]
             data = list(self.endpoint.read(64)[-8:])
         except usb.core.USBError as e:
-            logger.error("Could not read from driver: %s" % (str(e)))
+            logger.error("Could not read from WeDo device: %s" % (str(e)))
             return None
         return data
 
@@ -113,28 +108,29 @@ class WeDo:
             logger.error("Could not write to driver: %s" % (str(e)))
 
     def getData(self):
-        """Sensor data is contained in the 2nd and 4th byte,
-        with sensor IDs being contained in the 3rd and 5th
-        byte respectively."""
+        """Sensor data is contained in the 2nd and 4th byte, with
+        sensor IDs being contained in the 3rd and 5th byte
+        respectively."""
         rawData = self.getRawData()
         if rawData is not None:
             sensorData = {rawData[3]: rawData[2], rawData[5]: rawData[4]}
         else:
             sensorData = {}
-        print sensorData
         return sensorData
 
     def processTilt(self, v):
-        """Use a series of elif/value-checks to process the
-        tilt sensor data."""
-        if v in [24, 25, 26, 27]:
+        """Use a series of elif/value-checks to process the tilt
+        sensor data."""
+        if v in range(10, 40):
             return TILT_BACK
-        elif v in [73, 74, 75, 76]:
+        elif v in range(60, 90):
             return TILT_RIGHT
-        elif v in [175, 176, 177, 178, 179, 180]:
+        elif v in range(170, 190):
             return TILT_FORWARD
-        elif v in [229, 230]:
+        elif v in range(220, 240):
             return TILT_LEFT
+        elif v in range(120, 140):
+            return NO_TILT
         else:
             return NO_TILT
 

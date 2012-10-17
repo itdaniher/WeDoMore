@@ -140,18 +140,23 @@ class Wedo_plugin(Plugin):
 
     def wedo_select(self, i):
         ''' Select current device '''
+        if self.wedo_count() == 0:
+            self.active_wedo = None
+            self._parent.showlabel(
+                'status', _('WeDo is available'))
+            return
         if type(i) == unicode:
             i = str(i.encode('ascii', 'replace'))
         if type(i) == float or type(i) == str:
             i = int(i)
         if type(i) != int:
             i = 1
-        i -= 1  # Userspace counts from 1; internally, we count from 0
-        if i < 0 or i > self.wedo_count() - 1:
-            self._parent.showlabel(
-                'status', _('WeDo %d is not available; defaulting to 1') % (i))
         if i < 0:
             i = -i
+        if i < 0 or i > self.wedo_count() - 1:
+            self._parent.showlabel(
+                'status', _('WeDo %d is unavailable; defaulting to 1') % (i))
+        i -= 1  # Userspace counts from 1; internally, we count from 0
         if i > self.wedo_count() - 1:
             i = 0
         self.active_wedo = i
@@ -261,6 +266,7 @@ class Wedo_plugin(Plugin):
         ''' Each time program starts, scan for devices and reset status '''
         for wedo in self.WeDos:
             wedo.dev = None
+        self.active_wedo = None
         device_list = scan_for_devices()
         if len(device_list) > 0:
             self.status = True
