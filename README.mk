@@ -1,7 +1,10 @@
 ##About the WeDo
 
 
-The Lego WeDo is a tethered-over-USB sensing and robotics toolkit produced by Lego for the educational market. It's gotten lots of press, including a favorable review on the One Laptop Per Child blog, on [deployments and training in Peru.](http://blog.laptop.org/2011/02/12/lego-wedo-oloc-peru/)
+The [Lego WeDo](http://education.lego.com/en-us/lego-education-product-database/wedo/9580-lego-education-wedo-construction-set/) is a tethered-over-USB sensing and robotics toolkit produced by Lego for the educational market. 
+
+
+It's gotten lots of press, including a favorable review on the One Laptop Per Child blog, on [deployments and training in Peru.](http://blog.laptop.org/2011/02/12/lego-wedo-oloc-peru/)
 
 It's supported by Scratch(on Windows and OSX) and by Lego's proprietary software(on Windows.)
 
