@@ -9,10 +9,13 @@ It prominently features the [LB1836](http://semicon.sanyo.com/en/ds_e/EN3947F.pd
 
 The digital communication protocol used by the Power Functions system is documented on [Philo's Awesome Page](http://www.philohome.com/pf/LEGO_Power_Functions_RC.pdf).
 
-##Current State
+##How to Use it
 
-WeDoMore.py contains a series of functions that allow a user to read sensor data and control actuators. There are lots of magic numbers with little rhyme or reason, but the script provides useful control and communication with the WeDo.
+```python
+>>> from wedo import WeDo
+>>> wd = WeDo()
+>>> wd.setMotorB(100)  # forward motor B full speed
+>>> wd.setMotorB(0)    # stop motor B
+>>> wd.setMotorB(-50)  # reverse motor B half speed
+```
 
-##ToDo:
-
-* Massive Testing!
