@@ -1,3 +1,0 @@
-[submodule "PyUSB"]
-	path = PyUSB
-	url = https://github.com/walac/pyusb.git
