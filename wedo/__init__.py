@@ -8,7 +8,7 @@ from wedo.tilt import FLAT, TILT_BACK, TILT_FORWARD, TILT_LEFT, TILT_RIGHT
 import usb.core
 import logging
 
-logger = logging.getLogger('WeDoMore')
+logger = logging.getLogger('wedo')
 
 ID_VENDOR, ID_PRODUCT = 0x0694, 0x0003
 UNAVAILABLE = None
@@ -18,20 +18,6 @@ MOTOR = (0, 1, 2, 3, 238, 239)
 
 # limit the visibility to simplify the usage
 __all__ = ["scan_for_devices", "WeDo", "FLAT", "TILT_BACK", "TILT_FORWARD", "TILT_LEFT", "TILT_RIGHT"]
-
-
-def device_required(f):
-    """ A simple decorator to protect the instances with non working devices.
-    """
-
-    @wraps(f)
-    def wrapper(*args, **kwds):
-        if args[0].dev is None:
-            raise ValueError("No device attached to this instance")
-        return f(*args, **kwds)
-
-    return wrapper
-
 
 def scan_for_devices():
     """ Find all available devices """
@@ -63,6 +49,7 @@ class WeDo(object):
     def __init__(self, device=None):
         """
         If a device is not given, it will attach this instance to the first one found.
+        Otherwise you can pass a specific one from the list returned by scan_for_devices.
         """
         self.number = 0
         self.dev = device
@@ -92,7 +79,6 @@ class WeDo(object):
         except usb.core.USBError as e:
             logger.error("Could not talk to WeDo device: %s" % (str(e)))
 
-    @device_required
     def getRawData(self):
         """Read 64 bytes from the WeDo's endpoint, but only
         return the last eight."""
@@ -102,7 +88,6 @@ class WeDo(object):
             logger.exception("Could not read from WeDo device")
         return None
 
-    @device_required
     def setMotors(self):
         """
         Arguments should be in form of a number between 0
@@ -130,7 +115,6 @@ class WeDo(object):
         return sensorData
 
     @property
-    @device_required
     def raw_tilt(self):
         """
         Returns the raw tilt direction (arbitrary units)
@@ -142,7 +126,6 @@ class WeDo(object):
         return UNAVAILABLE
 
     @property
-    @device_required
     def tilt(self):
         """
         Returns the tilt direction (one of the FLAT, TILT_FORWARD, TILT_LEFT, TILT_RIGHT, TILT_BACK constants)
@@ -153,7 +136,6 @@ class WeDo(object):
         return process_tilt(raw_data)
 
     @property
-    @device_required
     def raw_distance(self):
         """
         Return the raw evaluated distance from the distance meter (arbitrary units)
@@ -165,7 +147,6 @@ class WeDo(object):
         return UNAVAILABLE
 
     @property
-    @device_required
     def distance(self):
         """
         Return the evaluated distance in meters from the distance meter.
