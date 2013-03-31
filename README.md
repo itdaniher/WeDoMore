@@ -52,6 +52,9 @@ From the source tree:
 ## Contributors
 
 [Ian Daniher](https://github.com/itdaniher)
+
 Tony Forster
+
 Walter Bender
+
 [Guillaume Binet](https://github.com/gbin)
