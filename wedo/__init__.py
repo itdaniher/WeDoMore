@@ -19,6 +19,8 @@ from functools import wraps
 from wedo.distance import interpolate_distance_data
 from wedo.motor import processMotorValues
 from wedo.tilt import process_tilt
+from wedo.tilt import FLAT, TILT_BACK, TILT_FORWARD, TILT_LEFT, TILT_RIGHT
+
 import usb.core
 import logging
 
@@ -30,6 +32,8 @@ TILTSENSOR = (38, 39)
 DISTANCESENSOR = (176, 177, 178, 179)
 MOTOR = (0, 1, 2, 3, 238, 239)
 
+# limit the visibility to simplify the usage
+__all__ = ["scan_for_devices", "WeDo", "FLAT", "TILT_BACK", "TILT_FORWARD", "TILT_LEFT", "TILT_RIGHT"]
 
 def device_required(f):
     """ A simple decorator to protect the instances with non working devices.
