@@ -47,6 +47,7 @@ From the source tree:
 
 # Current distance value in meters of the distance sensor:
 >>> wd.distance
+
 ```
 
 ## Contributors
