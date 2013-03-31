@@ -46,9 +46,11 @@ From the source tree:
 >>> wd.tilt
 
 # Current distance value in meters of the distance sensor:
->>> wd.distance```
+>>> wd.distance
+```
 
 ## Contributors
+
 [Ian Daniher](https://github.com/itdaniher)
 Tony Forster
 Walter Bender
