@@ -19,6 +19,7 @@ from functools import wraps
 import sys
 import os
 from wedo.distance import interpolate_distance_data
+from wedo.tilt import process_tilt
 
 sys.path.append(os.path.dirname(__file__))
 import usb.core
@@ -29,25 +30,23 @@ logger = logging.getLogger('WeDoMore')
 
 ID_VENDOR, ID_PRODUCT = 0x0694, 0x0003
 UNAVAILABLE = None
-TILTSENSOR = [38, 39]
-DISTANCESENSOR = [176, 177, 178, 179]
-MOTOR = [0, 1, 2, 3, 238, 239]
-TILT_FORWARD = 0
-TILT_LEFT = 1
-TILT_RIGHT = 2
-TILT_BACK = 3
-NO_TILT = -1
+TILTSENSOR = (38, 39)
+DISTANCESENSOR = (176, 177, 178, 179)
+MOTOR = (0, 1, 2, 3, 238, 239)
 
 
 def device_required(f):
     """ A simple decorator to protect the instances with non working devices.
     """
+
     @wraps(f)
     def wrapper(*args, **kwds):
         if args[0].dev is None:
             raise ValueError("No device attached to this instance")
         return f(*args, **kwds)
+
     return wrapper
+
 
 def scan_for_devices():
     """ Find all available devices """
@@ -64,6 +63,7 @@ def processMotorValues(value):
 
 
 class WeDo:
+
     def __init__(self, device=None):
         """Find a USB device with the VID and PID of the Lego
         WeDo. If the HID kernel driver is active, detatch
@@ -127,28 +127,28 @@ class WeDo:
             sensorData = {}
         return sensorData
 
-    def processTilt(self, v):
-        """Use a series of elif/value-checks to process the tilt
-        sensor data."""
-        if v in range(10, 40):
-            return TILT_BACK
-        elif v in range(60, 90):
-            return TILT_RIGHT
-        elif v in range(170, 190):
-            return TILT_FORWARD
-        elif v in range(220, 240):
-            return TILT_LEFT
-        elif v in range(120, 140):
-            return NO_TILT
-        return NO_TILT
-
+    @property
     @device_required
-    def getTilt(self):
+    def raw_tilt(self):
+        """
+        Returns the raw tilt direction (arbitrary units)
+        """
         data = self.getData()
         for num in data:
             if num in TILTSENSOR:
-                return self.processTilt(data[num])
+                return data[num]
         return UNAVAILABLE
+
+    @property
+    @device_required
+    def tilt(self):
+        """
+        Returns the tilt direction (one of the FLAT, TILT_FORWARD, TILT_LEFT, TILT_RIGHT, TILT_BACK constants)
+        """
+        raw_data = self.raw_tilt
+        if raw_data is UNAVAILABLE:
+            return UNAVAILABLE
+        return process_tilt(raw_data)
 
     @property
     @device_required
@@ -175,22 +175,24 @@ class WeDo:
             return UNAVAILABLE
         return interpolate_distance_data(raw_data)
 
-    def setMotorA(self, valMotorA):
+    @property
+    def motor_a(self):
+        return self.valMotorA
+
+    @property
+    def motor_b(self):
+        return self.valMotorB
+
+    @motor_a.setter
+    def motor_a(self, valMotorA):
         if valMotorA > 100 or valMotorA < -100:
             raise ValueError("A motor can only be between -100 and 100")
         self.valMotorA = valMotorA
         self.setMotors()
-        return self.valMotorA
 
-    def setMotorB(self, valMotorB):
+    @motor_b.setter
+    def motor_b(self, valMotorB):
         if valMotorB > 100 or valMotorB < -100:
             raise ValueError("A motor can only be between -100 and 100")
         self.valMotorB = valMotorB
         self.setMotors()
-        return self.valMotorB
-
-    def getMotorA(self):
-        return self.valMotorA
-
-    def getMotorB(self):
-        return self.valMotorB
