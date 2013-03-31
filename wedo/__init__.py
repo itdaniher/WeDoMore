@@ -17,6 +17,7 @@
 from functools import wraps
 
 from wedo.distance import interpolate_distance_data
+from wedo.motor import processMotorValues
 from wedo.tilt import process_tilt
 import usb.core
 import logging
@@ -48,21 +49,32 @@ def scan_for_devices():
     return usb.core.find(find_all=True, idVendor=ID_VENDOR, idProduct=ID_PRODUCT)
 
 
-def processMotorValues(value):
-    """Check to make sure motor values are sane."""
-    if 0 < value <= 100:
-        return value + 27
-    elif -100 <= value < 0:
-        return value - 27
-    return 0
-
-
 class WeDo(object):
+    """
+        Each instance of this class represents a physical WeDo device.
+
+        Usage :
+
+        >>> from wedo import WeDo
+        >>> wd = WeDo()
+
+        Activating the first motor full forward:
+        >>> wd.motor_a = 100
+
+        Activating the second motor half speed/force backward:
+        >>> wd.motor_b = -50
+
+        Current value of the tilt sensor:
+        >>> wd.tilt
+
+        Current distance value in meters of the distance sensor:
+        >>> wd.distance
+    """
 
     def __init__(self, device=None):
-        """Find a USB device with the VID and PID of the Lego
-        WeDo. If the HID kernel driver is active, detatch
-        it."""
+        """
+        If a device is not given, it will attach this instance to the first one found.
+        """
         self.number = 0
         self.dev = device
         if self.dev is None:
@@ -75,7 +87,9 @@ class WeDo(object):
         self.valMotorB = 0
 
     def init_device(self):
-        """ Reinit device associated with the WeDo instance """
+        """
+        Reinit device associated with the WeDo instance
+        """
         if self.dev is None:
             raise ValueError("No device attached to this instance")
         try:
@@ -101,9 +115,11 @@ class WeDo(object):
 
     @device_required
     def setMotors(self):
-        """Arguments should be in form of a number between 0
+        """
+        Arguments should be in form of a number between 0
         and 100, positive or negative. Magic numbers used for
-        the ctrl_transfer derived from sniffing USB coms."""
+        the ctrl_transfer derived from sniffing USB coms.
+        """
         data = [64, processMotorValues(self.valMotorA) & 0xFF, processMotorValues(self.valMotorB) & 0xFF,
                 0x00, 0x00, 0x00, 0x00, 0x00]
         try:
@@ -112,9 +128,11 @@ class WeDo(object):
             logger.exception("Could not write to driver")
 
     def getData(self):
-        """Sensor data is contained in the 2nd and 4th byte, with
+        """
+        Sensor data is contained in the 2nd and 4th byte, with
         sensor IDs being contained in the 3rd and 5th byte
-        respectively."""
+        respectively.
+        """
         rawData = self.getRawData()
         if rawData is not None:
             sensorData = {rawData[3]: rawData[2], rawData[5]: rawData[4]}
@@ -172,22 +190,30 @@ class WeDo(object):
 
     @property
     def motor_a(self):
+        """ Get back the last speed/force set for motor A
+        """
         return self.valMotorA
 
     @property
     def motor_b(self):
+        """ Get back the last speed/force set for motor A
+        """
         return self.valMotorB
 
     @motor_a.setter
-    def motor_a(self, valMotorA):
-        if valMotorA > 100 or valMotorA < -100:
+    def motor_a(self, value):
+        """ Sets the speed/force of the motor A, expects a value between -100 and 100
+        """
+        if value > 100 or value < -100:
             raise ValueError("A motor can only be between -100 and 100")
-        self.valMotorA = valMotorA
+        self.valMotorA = value
         self.setMotors()
 
     @motor_b.setter
-    def motor_b(self, valMotorB):
-        if valMotorB > 100 or valMotorB < -100:
+    def motor_b(self, value):
+        """ Sets the speed/force of the motor B, expects a value between -100 and 100
+        """
+        if value > 100 or value < -100:
             raise ValueError("A motor can only be between -100 and 100")
-        self.valMotorB = valMotorB
+        self.valMotorB = value
         self.setMotors()
