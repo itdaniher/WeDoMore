@@ -18,6 +18,7 @@ from functools import wraps
 
 import sys
 import os
+from wedo.distance import interpolate_distance_data
 
 sys.path.append(os.path.dirname(__file__))
 import usb.core
@@ -144,18 +145,35 @@ class WeDo:
     @device_required
     def getTilt(self):
         data = self.getData()
-        for num in data.keys():
+        for num in data:
             if num in TILTSENSOR:
                 return self.processTilt(data[num])
         return UNAVAILABLE
 
+    @property
     @device_required
-    def getDistance(self):
+    def raw_distance(self):
+        """
+        Return the raw evaluated distance from the distance meter (arbitrary units)
+        """
         data = self.getData()
-        for num in data.keys():
+        for num in data:
             if num in DISTANCESENSOR:
-                return data[num] - 69
+                return data[num]
         return UNAVAILABLE
+
+    @property
+    @device_required
+    def distance(self):
+        """
+        Return the evaluated distance in meters from the distance meter.
+        (Note: this is the ideal distance without any objets on the side, you might have to adapt it depending on your construction)
+        """
+
+        raw_data = self.raw_distance
+        if raw_data is UNAVAILABLE:
+            return UNAVAILABLE
+        return interpolate_distance_data(raw_data)
 
     def setMotorA(self, valMotorA):
         if valMotorA > 100 or valMotorA < -100:
