@@ -34,16 +34,12 @@ How to Use it
 
     >>> from wedo import WeDo
     >>> wd = WeDo()
-
     # Activating the first motor full forward:
     >>> wd.motor_a = 100
-
     # Activating the second motor half speed/force backward:
     >>> wd.motor_b = -50
-
     # Current value of the tilt sensor:
     >>> wd.tilt
-
     # Current distance value in meters of the distance sensor:
     >>> wd.distance
 
