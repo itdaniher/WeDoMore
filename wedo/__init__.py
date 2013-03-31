@@ -16,14 +16,9 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 from functools import wraps
 
-import sys
-import os
 from wedo.distance import interpolate_distance_data
 from wedo.tilt import process_tilt
-
-sys.path.append(os.path.dirname(__file__))
 import usb.core
-
 import logging
 
 logger = logging.getLogger('WeDoMore')
@@ -62,7 +57,7 @@ def processMotorValues(value):
     return 0
 
 
-class WeDo:
+class WeDo(object):
 
     def __init__(self, device=None):
         """Find a USB device with the VID and PID of the Lego
