@@ -29,7 +29,6 @@ from TurtleArt.tapalette import palette_blocks
 from TurtleArt.talogo import logoerror
 from TurtleArt.taprimitive import Primitive, ArgSlot
 from TurtleArt.tatype import TYPE_INT, TYPE_NUMBER
-from TurtleArt.tautils import debug_output
 from plugins.plugin import Plugin
 from wedo import WeDo, scan_for_devices, UNAVAILABLE
 from gettext import gettext as _
@@ -53,8 +52,9 @@ class Wedo_plugin(Plugin):
         self.active_wedo = 0
 
     def setup(self):
-        debug_output('creating %s palette' % _('wedo'), self.tw.running_sugar)
-        palette = make_palette('wedo', COLOR_NOTPRESENT, _('Palette of WeDo blocks'))
+
+        palette = make_palette('wedo', COLOR_NOTPRESENT, _('Palette of WeDo blocks'),
+                                translation=_('wedo'))
 
         palette.add_block('wedorefresh',
                 style='basic-style',
