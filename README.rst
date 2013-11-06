@@ -50,9 +50,11 @@ Contributors
 
 Tony Forster
 
-Walter Bender
+`Walter Bender`_
 
 `Guillaume Binet`_
+
+`Alan Aguiar`_
 
 .. _`Lego WeDo`: http://education.lego.com/en-us/lego-education-product-database/wedo/9580-lego-education-wedo-construction-set/
 .. _LB1836: http://semicon.sanyo.com/en/ds_e/EN3947F.pdf
@@ -61,3 +63,5 @@ Walter Bender
 .. _`Philo's Awesome Page`: http://www.philohome.com/pf/LEGO_Power_Functions_RC.pdf
 .. _`Guillaume Binet`: https://github.com/gbin
 .. _`Ian Daniher`: https://github.com/itdaniher
+.. _`Walter Bender`: https://github.com/walterbender
+.. _`Alan Aguiar`: https://github.com/alanjas
