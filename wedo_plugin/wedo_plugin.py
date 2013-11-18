@@ -244,7 +244,9 @@ class Wedo_plugin(Plugin):
         self.active_wedo = 0
         self.WeDos = []
         for dev in scan_for_devices():
-            self.WeDos.append(WeDo(dev))
+            w = WeDo(dev)
+            w.init_device()
+            self.WeDos.append(w)
 
     def stop_all(self):
         for wedo in self.WeDos:
