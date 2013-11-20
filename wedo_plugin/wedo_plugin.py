@@ -177,7 +177,7 @@ class Wedo_plugin(Plugin):
     def getTilt(self):
         if self.WeDos:
             wedo = self.WeDos[self.active_wedo]
-            tilt = wedo.tilt()
+            tilt = wedo.tilt
             if tilt == UNAVAILABLE:
                 return ERROR
             return tilt
@@ -187,7 +187,7 @@ class Wedo_plugin(Plugin):
     def getDistance(self):
         if self.WeDos:
             wedo = self.WeDos[self.active_wedo]
-            dist = wedo.distance()
+            dist = wedo.distance
             if dist == UNAVAILABLE:
                 return ERROR
             return dist
@@ -197,7 +197,7 @@ class Wedo_plugin(Plugin):
     def getMotorA(self):
         if self.WeDos:
             wedo = self.WeDos[self.active_wedo]
-            speed = wedo.motor_a()
+            speed = wedo.motor_a
             if speed == UNAVAILABLE:
                 return ERROR
             return speed
@@ -207,7 +207,7 @@ class Wedo_plugin(Plugin):
     def getMotorB(self):
         if self.WeDos:
             wedo = self.WeDos[self.active_wedo]
-            speed = wedo.motor_b()
+            speed = wedo.motor_b
             if speed == UNAVAILABLE:
                 return ERROR
             return speed
@@ -223,7 +223,7 @@ class Wedo_plugin(Plugin):
             raise logoerror(ERROR_SPEED)
         if self.WeDos:
             wedo = self.WeDos[self.active_wedo]
-            wedo.motor_a(speed)
+            wedo.motor_a = speed
 
     def setMotorB(self, speed):
         try:
@@ -234,7 +234,7 @@ class Wedo_plugin(Plugin):
             raise logoerror(ERROR_SPEED)
         if self.WeDos:
             wedo = self.WeDos[self.active_wedo]
-            wedo.motor_b(speed)
+            wedo.motor_b = speed
 
     ############################### Useful functions ##########################
 
@@ -245,13 +245,12 @@ class Wedo_plugin(Plugin):
         self.WeDos = []
         for dev in scan_for_devices():
             w = WeDo(dev)
-            w.init_device()
             self.WeDos.append(w)
 
     def stop_all(self):
         for wedo in self.WeDos:
-            wedo.motor_a(0)
-            wedo.motor_b(0)
+            wedo.motor_a = 0
+            wedo.motor_b = 0
 
     def change_color_blocks(self):
         index = palette_name_to_index('wedo')
