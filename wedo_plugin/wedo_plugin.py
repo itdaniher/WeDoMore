@@ -177,40 +177,32 @@ class Wedo_plugin(Plugin):
     def getTilt(self):
         if self.WeDos:
             wedo = self.WeDos[self.active_wedo]
-            tilt = wedo.tilt
-            if tilt == UNAVAILABLE:
+            if wedo.tilt == UNAVAILABLE:
                 return ERROR
-            return tilt
+            return wedo.tilt
         else:
             return ERROR
 
     def getDistance(self):
         if self.WeDos:
             wedo = self.WeDos[self.active_wedo]
-            dist = wedo.distance
-            if dist == UNAVAILABLE:
+            if wedo.distance == UNAVAILABLE:
                 return ERROR
-            return dist
+            return wedo.distance
         else:
             return ERROR
 
     def getMotorA(self):
         if self.WeDos:
             wedo = self.WeDos[self.active_wedo]
-            speed = wedo.motor_a
-            if speed == UNAVAILABLE:
-                return ERROR
-            return speed
+            return wedo.motor_a
         else:
             return ERROR
 
     def getMotorB(self):
         if self.WeDos:
             wedo = self.WeDos[self.active_wedo]
-            speed = wedo.motor_b
-            if speed == UNAVAILABLE:
-                return ERROR
-            return speed
+            return wedo.motor_b
         else:
             return ERROR
 
