@@ -235,7 +235,12 @@ class Wedo_plugin(Plugin):
             wedo.dev = None
         self.active_wedo = 0
         self.WeDos = []
-        for dev in scan_for_devices():
+        devices = []
+        try:
+            devices = scan_for_devices()
+        except:
+            pass
+        for dev in devices:
             w = WeDo(dev)
             self.WeDos.append(w)
 
