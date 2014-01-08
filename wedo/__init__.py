@@ -5,6 +5,7 @@ from wedo.motor import processMotorValues
 from wedo.tilt import process_tilt
 from wedo.tilt import FLAT, TILT_BACK, TILT_FORWARD, TILT_LEFT, TILT_RIGHT
 
+import os
 import usb.core
 import logging
 
@@ -58,6 +59,7 @@ class WeDo(object):
             if not devices:
                 raise OSError("Could not find a connected WeDo device")
             self.dev = devices[0]
+            self.dev.set_configuration()
         self.init_device()
         self.valMotorA = 0
         self.valMotorB = 0
@@ -69,7 +71,7 @@ class WeDo(object):
         if self.dev is None:
             raise ValueError("No device attached to this instance")
         try:
-            if self.dev.is_kernel_driver_active(0):
+            if os.name != 'nt' and self.dev.is_kernel_driver_active(0):
                 try:
                     self.dev.detach_kernel_driver(0)
                 except usb.core.USBError as e:
