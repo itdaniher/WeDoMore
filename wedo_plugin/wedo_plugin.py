@@ -104,7 +104,7 @@ class Wedo_plugin(Plugin):
         palette.add_block('wedogetMotorA',
                 style='box-style',
                 label=_('Motor A'),
-                help_string=_('returns the current value of Motor A'),
+                help_string=_('returns the current speed of Motor A'),
                 value_block=True,
                 prim_name = 'wedogetMotorA')
         self.tw.lc.def_prim('wedogetMotorA', 0,
@@ -113,7 +113,7 @@ class Wedo_plugin(Plugin):
         palette.add_block('wedogetMotorB',
                 style='box-style',
                 label=_('Motor B'),
-                help_string=_('returns the current value of Motor B'),
+                help_string=_('returns the current speed of Motor B'),
                 value_block=True,
                 prim_name = 'wedogetMotorB')
         self.tw.lc.def_prim('wedogetMotorB', 0,
@@ -124,7 +124,7 @@ class Wedo_plugin(Plugin):
                 label = _('Motor A'),
                 default = 30,
                 prim_name = 'wedosetMotorA',
-                help_string = _('set the value for Motor A'))
+                help_string = _('set the speed for Motor A'))
         self.tw.lc.def_prim('wedosetMotorA', 1,
             Primitive(self.setMotorA, arg_descs=[ArgSlot(TYPE_NUMBER)]))
 
@@ -133,7 +133,7 @@ class Wedo_plugin(Plugin):
                 label = _('Motor B'),
                 default = 30,
                 prim_name = 'wedosetMotorB',
-                help_string = _('set the value for Motor B'))
+                help_string = _('set the speed for Motor B'))
         self.tw.lc.def_prim('wedosetMotorB', 1,
             Primitive(self.setMotorB, arg_descs=[ArgSlot(TYPE_NUMBER)]))
 
