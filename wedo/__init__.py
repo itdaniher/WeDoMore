@@ -91,7 +91,7 @@ class WeDo(object):
         data = [64, processMotorValues(self.valMotorA) & 0xFF, processMotorValues(self.valMotorB) & 0xFF,
                 0x00, 0x00, 0x00, 0x00, 0x00]
         try:
-            self.dev.ctrl_transfer(bmRequestType=0x21, bRequest=0x09, wValue=0x0200, wIndex=0, data=data)
+            self.dev.ctrl_transfer(bmRequestType=0x21, bRequest=0x09, wValue=0x0200, wIndex=0, data_or_wLength=data)
         except usb.core.USBError as e:
             logger.exception("Could not write to driver")
 
