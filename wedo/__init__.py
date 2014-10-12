@@ -11,10 +11,11 @@ import logging
 
 logger = logging.getLogger('wedo')
 
-ID_VENDOR = 0x0694
-ID_PRODUCT = 0x0003
-WEDO_INTERFACE = 0
+ID_VENDOR          = 0x0694
+ID_PRODUCT         = 0x0003
+WEDO_INTERFACE     = 0
 WEDO_CONFIGURATION = 1
+
 UNAVAILABLE = None
 TILTSENSOR = (38, 39)
 DISTANCESENSOR = (176, 177, 178, 179)
@@ -25,8 +26,13 @@ __all__ = ["scan_for_devices", "WeDo", "FLAT", "TILT_BACK", "TILT_FORWARD", "TIL
 
 def scan_for_devices():
     """ Find all available devices """
-    return usb.core.find(find_all=True, idVendor=ID_VENDOR, idProduct=ID_PRODUCT)
-
+    devices = []
+    try:
+        for dev in usb.core.find(find_all=True, idVendor=ID_VENDOR, idProduct=ID_PRODUCT):
+            devices.append(dev)
+    except usb.core.USBError as e:
+        raise OSError("Could not find a connected WeDo device: %s" % str(e))
+    return devices
 
 class WeDo(object):
     """
@@ -50,7 +56,7 @@ class WeDo(object):
         >>> wd.distance
     """
 
-    def __init__(self, device):
+    def __init__(self, device=None):
         """
         If a device is not given, it will attach this instance to the first one found.
         Otherwise you can pass a specific one from the list returned by scan_for_devices.
@@ -59,8 +65,6 @@ class WeDo(object):
         self.dev = device
         if self.dev is None:
             devices = scan_for_devices()
-            if not devices:
-                raise OSError("Could not find a connected WeDo device")
             self.dev = devices[0]
         self.init_device()
         self.valMotorA = 0
