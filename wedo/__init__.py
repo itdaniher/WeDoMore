@@ -57,6 +57,12 @@ class WeDo(object):
         """
         self.number = 0
         self.dev = device
+        if self.dev is None:
+            devices = scan_for_devices()
+            if not devices:
+                raise OSError("Could not find a connected WeDo device")
+            self.dev = devices[0]
+        self.init_device()
         self.valMotorA = 0
         self.valMotorB = 0
         self.init_device()
@@ -66,12 +72,15 @@ class WeDo(object):
         Reinit device associated with the WeDo instance
         """
         try:
-            if self.dev.is_kernel_driver_active(WEDO_INTERFACE):
-                self.dev.detach_kernel_driver(WEDO_INTERFACE)
+            if os.name != 'nt' and self.dev.is_kernel_driver_active(WEDO_INTERFACE):
+                try:
+                    self.dev.detach_kernel_driver(WEDO_INTERFACE)
+                except usb.core.USBError as e:
+                    logger.error("Could not detatch kernel driver: %s" % str(e))
             self.dev.set_configuration(WEDO_CONFIGURATION)
             self.endpoint = self.dev[0][(0, 0)][0]
         except usb.core.USBError as e:
-            logger.error("Could not detatch kernel driver: %s" % (str(e)))
+            logger.error("Could not init device: %s" % str(e))
 
     def getRawData(self):
         """Read 64 bytes from the WeDo's endpoint, but only

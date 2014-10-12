@@ -54,6 +54,8 @@ Tony Forster
 
 `Guillaume Binet`_
 
+`Joshua Coxwell`_
+
 `Alan Aguiar`_
 
 .. _`Lego WeDo`: http://education.lego.com/en-us/lego-education-product-database/wedo/9580-lego-education-wedo-construction-set/
@@ -64,4 +66,6 @@ Tony Forster
 .. _`Guillaume Binet`: https://github.com/gbin
 .. _`Ian Daniher`: https://github.com/itdaniher
 .. _`Walter Bender`: https://github.com/walterbender
+.. _`Joshua Coxwell`: https://github.com/JCoxwell
 .. _`Alan Aguiar`: https://github.com/alanjas
+
