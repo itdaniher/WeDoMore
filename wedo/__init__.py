@@ -31,7 +31,7 @@ def scan_for_devices():
         for dev in usb.core.find(find_all=True, idVendor=ID_VENDOR, idProduct=ID_PRODUCT):
             devices.append(dev)
     except usb.core.USBError as e:
-        raise OSError("Could not find a connected WeDo device: %s" % str(e))
+        logger.error("Could not find a connected WeDo device: %s" % str(e))
     return devices
 
 class WeDo(object):
@@ -65,6 +65,8 @@ class WeDo(object):
         self.dev = device
         if self.dev is None:
             devices = scan_for_devices()
+            if not(devices):
+                raise OSError("Could not find a connected WeDo device")
             self.dev = devices[0]
         self.init_device()
         self.valMotorA = 0
