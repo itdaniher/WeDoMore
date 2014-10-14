@@ -11,7 +11,11 @@ import logging
 
 logger = logging.getLogger('wedo')
 
-ID_VENDOR, ID_PRODUCT = 0x0694, 0x0003
+ID_VENDOR          = 0x0694
+ID_PRODUCT         = 0x0003
+WEDO_INTERFACE     = 0
+WEDO_CONFIGURATION = 1
+
 UNAVAILABLE = None
 TILTSENSOR = (38, 39)
 DISTANCESENSOR = (176, 177, 178, 179)
@@ -22,8 +26,13 @@ __all__ = ["scan_for_devices", "WeDo", "FLAT", "TILT_BACK", "TILT_FORWARD", "TIL
 
 def scan_for_devices():
     """ Find all available devices """
-    return usb.core.find(find_all=True, idVendor=ID_VENDOR, idProduct=ID_PRODUCT)
-
+    devices = []
+    try:
+        for dev in usb.core.find(find_all=True, idVendor=ID_VENDOR, idProduct=ID_PRODUCT):
+            devices.append(dev)
+    except usb.core.USBError as e:
+        logger.error("Could not find a connected WeDo device: %s" % str(e))
+    return devices
 
 class WeDo(object):
     """
@@ -56,30 +65,28 @@ class WeDo(object):
         self.dev = device
         if self.dev is None:
             devices = scan_for_devices()
-            if not devices:
+            if not(devices):
                 raise OSError("Could not find a connected WeDo device")
             self.dev = devices[0]
-            self.dev.set_configuration()
         self.init_device()
         self.valMotorA = 0
         self.valMotorB = 0
+        self.init_device()
 
     def init_device(self):
         """
         Reinit device associated with the WeDo instance
         """
-        if self.dev is None:
-            raise ValueError("No device attached to this instance")
         try:
-            if os.name != 'nt' and self.dev.is_kernel_driver_active(0):
+            if os.name != 'nt' and self.dev.is_kernel_driver_active(WEDO_INTERFACE):
                 try:
-                    self.dev.detach_kernel_driver(0)
+                    self.dev.detach_kernel_driver(WEDO_INTERFACE)
                 except usb.core.USBError as e:
-                    logger.error(
-                        "Could not detatch kernel driver: %s" % (str(e)))
+                    logger.error("Could not detatch kernel driver: %s" % str(e))
+            self.dev.set_configuration(WEDO_CONFIGURATION)
             self.endpoint = self.dev[0][(0, 0)][0]
         except usb.core.USBError as e:
-            logger.error("Could not talk to WeDo device: %s" % (str(e)))
+            logger.error("Could not init device: %s" % str(e))
 
     def getRawData(self):
         """Read 64 bytes from the WeDo's endpoint, but only
@@ -189,3 +196,4 @@ class WeDo(object):
             raise ValueError("A motor can only be between -100 and 100")
         self.valMotorB = value
         self.setMotors()
+
