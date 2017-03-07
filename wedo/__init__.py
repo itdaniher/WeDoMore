@@ -19,7 +19,7 @@ WEDO_CONFIGURATION = 1
 UNAVAILABLE = None
 TILTSENSOR = (38, 39, 40)
 DISTANCESENSOR = (176, 177, 178, 179, 180)
-MOTOR = (0, 1, 2, 3, 203, 204, 238, 239, 240)
+MOTOR = (0, 1, 2, 3, 99, 100, 101, 102, 203, 204, 238, 239, 240)
 
 # limit the visibility to simplify the usage
 __all__ = ["scan_for_devices", "WeDo", "FLAT", "TILT_BACK", "TILT_FORWARD", "TILT_LEFT", "TILT_RIGHT"]
